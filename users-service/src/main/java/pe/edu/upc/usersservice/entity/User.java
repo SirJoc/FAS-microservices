@@ -30,7 +30,7 @@ public class User {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createAt;
 
-    @Column(length = 1, nullable = true)
+    @Column(length = 20, nullable = true)
     private String status;
 
     public Long getId() {
