@@ -19,7 +19,6 @@ public class Promotion {
     @NotNull
     private String startDate;
     @NotNull
-    private Date endDate;
     private String endDate;
 
     public String getType() {
