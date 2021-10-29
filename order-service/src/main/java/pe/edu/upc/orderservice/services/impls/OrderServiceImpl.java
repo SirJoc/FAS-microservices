@@ -15,7 +15,7 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
-    private final OrderRepository orderRepository;
+    private  OrderRepository orderRepository;
 
     @Override
     public List<Order> listAllOrders() {
