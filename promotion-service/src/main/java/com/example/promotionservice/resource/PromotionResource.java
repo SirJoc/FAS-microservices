@@ -5,6 +5,6 @@ import java.util.Date;
 public class PromotionResource {
     private Long id;
     private String type;
-    private Date startDate;
-    private Date endDate;
+    private String startDate;
+    private String endDate;
 }
