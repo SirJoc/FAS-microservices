@@ -24,12 +24,12 @@ import java.util.stream.Collectors;
 
 
 @RestController
-@RequestMapping("/api/subscriptions")
+@RequestMapping("/api")
 public class SubscriptionController {
     @Autowired
     SubscriptionService subscriptionService;
 
-    @GetMapping
+    @GetMapping("/subscriptions")
     @Operation(summary = "Get all subscriptions", description = "Get all subscriptions", tags = {"subscriptions"})
     @ApiResponses( value = {
             @ApiResponse(responseCode = "200", description = "All subscriptions returned", content = @Content(mediaType = "application/json")),
@@ -48,7 +48,7 @@ public class SubscriptionController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Subscription created", content = @Content(mediaType = "application/json")),
     })
-    @PostMapping
+    @PostMapping("/users/{id}/subscriptions")
     public ResponseEntity<Subscription> createSubscription(@PathVariable("id") long userId, @RequestBody Subscription subscription, BindingResult result) throws Exception {
         if (result.hasErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, this.formatMessage(result));
@@ -62,7 +62,7 @@ public class SubscriptionController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Subscription Updated", content = @Content(mediaType = "application/json")),
     })
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = "/subscriptions/{id}")
     public ResponseEntity<Subscription> updateSubscription(@PathVariable("id") long id, @RequestBody Subscription entity) {
         try {
             Optional<Subscription> subscription = subscriptionService.findById(id);
@@ -85,7 +85,7 @@ public class SubscriptionController {
             @ApiResponse(responseCode = "200", description = "Subscription returned", content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "404", description = "Subscription not found")
     })
-    @GetMapping(value = "/id/{id}")
+    @GetMapping(value = "/subscriptions/id/{id}")
     public ResponseEntity<Subscription> fetchById(@PathVariable("id") Long id) {
         try {
             Optional<Subscription> optionalSubscription = subscriptionService.findById(id);
@@ -104,7 +104,7 @@ public class SubscriptionController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Subscription deleted", content = @Content(mediaType = "application/json")),
     })
-    @DeleteMapping(value = "/id/{id}")
+    @DeleteMapping(value = "/subscriptions/id/{id}")
     public void deleteById(@PathVariable("id") Long id) throws Exception {
         subscriptionService.deleteById(id);
     }
