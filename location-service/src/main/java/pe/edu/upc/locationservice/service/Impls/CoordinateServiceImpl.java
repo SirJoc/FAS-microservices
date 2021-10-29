@@ -2,7 +2,7 @@ package pe.edu.upc.locationservice.service.Impls;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pe.edu.upc.locationservice.models.Coordinate;
+import pe.edu.upc.locationservice.entity.Coordinate;
 import pe.edu.upc.locationservice.repository.CoordinateRepository;
 import pe.edu.upc.locationservice.service.CoordinateService;
 
