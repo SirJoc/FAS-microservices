@@ -1,6 +1,6 @@
 package pe.edu.upc.locationservice.service;
 
-import pe.edu.upc.locationservice.models.Coordinate;
+import pe.edu.upc.locationservice.entity.Coordinate;
 
 import java.util.List;
 
