@@ -34,13 +34,13 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.h2database:h2'
-    annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
     testImplementation('org.springframework.boot:spring-boot-starter-test'){
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
     testImplementation 'org.mockito:mockito-inline:3.12.4'
     testImplementation 'org.mockito:mockito-junit-jupiter:3.12.4'
-
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.5.12'
 }
 
 dependencyManagement {
