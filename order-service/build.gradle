@@ -35,6 +35,11 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test:2.5.5'
 	// https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
 	implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.5.12'
+	testImplementation('org.springframework.boot:spring-boot-starter-test'){
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+	testImplementation 'org.mockito:mockito-inline:3.12.4'
+	testImplementation 'org.mockito:mockito-junit-jupiter:3.12.4'
 }
 
 dependencyManagement {
