@@ -15,7 +15,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping(value = "/products")
+@RequestMapping(value = "/promotions")
 public class PromotionsController {
    @Autowired
    private PromotionService promotionService;
