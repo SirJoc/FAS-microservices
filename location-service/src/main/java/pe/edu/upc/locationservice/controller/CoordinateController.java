@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import pe.edu.upc.locationservice.models.Coordinate;
+import pe.edu.upc.locationservice.entity.Coordinate;
 import pe.edu.upc.locationservice.service.CoordinateService;
 
 import java.util.ArrayList;

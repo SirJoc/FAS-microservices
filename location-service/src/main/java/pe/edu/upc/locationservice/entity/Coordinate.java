@@ -1,9 +1,10 @@
-package pe.edu.upc.locationservice.models;
+package pe.edu.upc.locationservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import pe.edu.upc.locationservice.model.User;
 
 import javax.persistence.*;
 
@@ -34,4 +35,7 @@ public class Coordinate {
     private Boolean favorite_route;
 
     private String status;
+
+    @Transient
+    private User user;
 }

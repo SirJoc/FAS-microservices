@@ -15,7 +15,8 @@ public class PublicityServiceImpl implements PublicityService {
     PublicityRepository publicityRepository;
 
     @Override
-    public Publicity save(Publicity entity) throws Exception {
+    public Publicity save(Long userId, Publicity entity) throws Exception {
+        entity.setUserId(userId);
         return publicityRepository.save(entity);
     }
 
@@ -37,5 +38,10 @@ public class PublicityServiceImpl implements PublicityService {
     @Override
     public void deleteById(Long aLong) throws Exception {
         publicityRepository.deleteById(aLong);
+    }
+
+    @Override
+    public List<Publicity> getAllPublicitiesByUserId(Long userId) throws Exception {
+        return publicityRepository.findByUserId(userId);
     }
 }

@@ -22,12 +22,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/publicities")
+@RequestMapping("/api")
 public class PublicityController {
     @Autowired
     PublicityService publicityService;
 
-    @GetMapping
+    @GetMapping(value = "/publicities")
     @Operation(summary = "Get all publicities", description = "Get all publicities", tags = {"publicities"})
     @ApiResponses( value = {
             @ApiResponse(responseCode = "200", description = "All publicities returned", content = @Content(mediaType = "application/json")),
@@ -46,12 +46,12 @@ public class PublicityController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Publicity created", content = @Content(mediaType = "application/json")),
     })
-    @PostMapping
+    @PostMapping("/user/{id}/publicities")
     public ResponseEntity<Publicity> createPublicity(@PathVariable("id") long userId, @RequestBody Publicity publicity, BindingResult result) throws Exception {
         if (result.hasErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, this.formatMessage(result));
         }
-        Publicity publicityDB = publicityService.save(publicity);
+        Publicity publicityDB = publicityService.save(userId, publicity);
         return ResponseEntity.status(HttpStatus.CREATED).body(publicityDB);
     }
 
@@ -60,7 +60,7 @@ public class PublicityController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "publicity Updated", content = @Content(mediaType = "application/json")),
     })
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = "/publicities/{id}")
     public ResponseEntity<Publicity> updatePublicity(@PathVariable("id") long id, @RequestBody Publicity entity) {
         try {
             Optional<Publicity> publicity = publicityService.findById(id);
@@ -83,7 +83,7 @@ public class PublicityController {
             @ApiResponse(responseCode = "200", description = "Publicity returned", content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "404", description = "Publicity not found")
     })
-    @GetMapping(value = "/id/{id}")
+    @GetMapping(value = "/publicities/id/{id}")
     public ResponseEntity<Publicity> fetchById(@PathVariable("id") Long id) {
         try {
             Optional<Publicity> optionalPublicity = publicityService.findById(id);
@@ -102,9 +102,14 @@ public class PublicityController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Publicity deleted", content = @Content(mediaType = "application/json")),
     })
-    @DeleteMapping(value = "/id/{id}")
+    @DeleteMapping(value = "/publicities/id/{id}")
     public void deleteById(@PathVariable("id") Long id) throws Exception {
         publicityService.deleteById(id);
+    }
+
+    @RequestMapping(value = "/publicities/users/{id}")
+    public List<Publicity> getPublicitiesByUserId(@PathVariable("id") Long userId) throws Exception {
+        return publicityService.getAllPublicitiesByUserId(userId);
     }
 
     private String formatMessage( BindingResult result){

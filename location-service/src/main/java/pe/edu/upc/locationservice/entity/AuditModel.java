@@ -1,4 +1,4 @@
-package pe.edu.upc.locationservice.models;
+package pe.edu.upc.locationservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
