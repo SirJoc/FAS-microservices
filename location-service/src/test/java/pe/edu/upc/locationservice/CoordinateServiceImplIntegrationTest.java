@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import pe.edu.upc.locationservice.models.Coordinate;
+import pe.edu.upc.locationservice.entity.Coordinate;
 import pe.edu.upc.locationservice.repository.CoordinateRepository;
 import pe.edu.upc.locationservice.service.CoordinateService;
 import pe.edu.upc.locationservice.service.Impls.CoordinateServiceImpl;
