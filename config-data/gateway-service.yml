@@ -17,3 +17,8 @@ spring:
           uri: lb://user-service
           predicates:
             - Path=/api/**
+      routes:
+        - id: payment-service
+          uri: lb://payment-service
+          predicates:
+            - Path=/api/**
