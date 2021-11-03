@@ -46,12 +46,12 @@ public class PublicityController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Publicity created", content = @Content(mediaType = "application/json")),
     })
-    @PostMapping("/user/{id}/publicities")
-    public ResponseEntity<Publicity> createPublicity(@PathVariable("id") long userId, @RequestBody Publicity publicity, BindingResult result) throws Exception {
+    @PostMapping("/publicities")
+    public ResponseEntity<Publicity> createPublicity(@RequestBody Publicity publicity, BindingResult result) throws Exception {
         if (result.hasErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, this.formatMessage(result));
         }
-        Publicity publicityDB = publicityService.save(userId, publicity);
+        Publicity publicityDB = publicityService.save(publicity);
         return ResponseEntity.status(HttpStatus.CREATED).body(publicityDB);
     }
 

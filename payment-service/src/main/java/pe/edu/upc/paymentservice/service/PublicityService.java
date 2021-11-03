@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PublicityService {
-    public Publicity save(Long userId, Publicity entity) throws Exception;
+    public Publicity save(Publicity entity) throws Exception;
     public List<Publicity> findAll() throws Exception;
     public Optional<Publicity> findById(Long aLong) throws Exception;
     public Publicity update(Publicity entity) throws Exception;
