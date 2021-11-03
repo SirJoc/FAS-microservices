@@ -2,7 +2,9 @@ package pe.edu.upc.paymentservice.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pe.edu.upc.paymentservice.client.UserClient;
 import pe.edu.upc.paymentservice.entities.Publicity;
+import pe.edu.upc.paymentservice.model.User;
 import pe.edu.upc.paymentservice.repository.PublicityRepository;
 import pe.edu.upc.paymentservice.service.PublicityService;
 
@@ -14,9 +16,19 @@ public class PublicityServiceImpl implements PublicityService {
     @Autowired
     PublicityRepository publicityRepository;
 
+    @Autowired
+    UserClient userClient;
+
     @Override
     public Publicity save(Publicity entity) throws Exception {
-        return publicityRepository.save(entity);
+        User user = userClient.fetchById(entity.getUserId());
+        publicityRepository.save(entity);
+        List<Publicity> publicities = getAllPublicitiesByUserId(user.getId());
+        user.setPublicities(publicities);
+        System.out.println("aqui estan");
+        System.out.println(publicities);
+        userClient.updateUser(user, entity.getUserId());
+        return entity;
     }
 
     @Override
@@ -37,5 +49,10 @@ public class PublicityServiceImpl implements PublicityService {
     @Override
     public void deleteById(Long aLong) throws Exception {
         publicityRepository.deleteById(aLong);
+    }
+
+    @Override
+    public List<Publicity> getAllPublicitiesByUserId(Long userId) throws Exception {
+        return publicityRepository.findByUserId(userId);
     }
 }

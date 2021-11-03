@@ -1,9 +1,11 @@
 package pe.edu.upc.paymentservice.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pe.edu.upc.paymentservice.model.User;
 
 import javax.persistence.*;
 
@@ -22,6 +24,6 @@ public class Publicity {
     @Column(length = 40, nullable = false)
     private int duration;
 
-//    @Transient
-//    private User user;
+    @Column(name = "user_id")
+    private Long userId;
 }
