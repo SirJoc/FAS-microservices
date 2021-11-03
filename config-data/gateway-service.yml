@@ -13,12 +13,12 @@ spring:
         locator:
           enabled: true
       routes:
-        - id: users-service
-          uri: lb://user-service
-          predicates:
-            - Path=/api/**
         - id: payment-service
           uri: lb://payment-service
           predicates:
             - Path=/api/publicities/**
             - Path=/api/subscriptions/**
+        - id: users-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/**
