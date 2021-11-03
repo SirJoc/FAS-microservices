@@ -11,6 +11,7 @@ import pe.edu.upc.usersservice.repository.UserRepository;
 import pe.edu.upc.usersservice.service.UserService;
 import org.springframework.transaction.annotation.Transactional;
 
+
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
@@ -39,7 +40,9 @@ public class UserServiceImpl implements UserService {
         user.setEmail(newEntity.getEmail());
         user.setPassword(newEntity.getPassword());
         user.setRuc(newEntity.getRuc());
-
+        System.out.println("AQui esta todo");
+        System.out.println(newEntity.getPublicities());
+        user.setPublicities(newEntity.getPublicities());
         return userRepository.save(user);
     }
 
