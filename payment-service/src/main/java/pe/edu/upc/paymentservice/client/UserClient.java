@@ -1,17 +1,16 @@
 package pe.edu.upc.paymentservice.client;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.paymentservice.model.User;
 
-import javax.validation.Valid;
-
-@FeignClient(name = "user-service")
+@FeignClient(name = "user-service", fallback = UserHystrixFallbackFactory.class)
 @RequestMapping("/api")
 public interface UserClient {
     @GetMapping("/users/{id}")
-    public User fetchById(@PathVariable(name = "id") Long id);
+    public ResponseEntity<User> fetchById(@PathVariable(name = "id") Long id);
     @PutMapping("/users/{id}")
-    public User updateUser(@Valid @RequestBody User user, @PathVariable(name = "id") Long id);
+    public ResponseEntity<User> updateUser(@RequestBody ResponseEntity<User> user, @PathVariable(name = "id") Long id);
 
 }
