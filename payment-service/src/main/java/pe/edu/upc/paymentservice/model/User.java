@@ -1,5 +1,6 @@
 package pe.edu.upc.paymentservice.model;
 
+import lombok.Builder;
 import lombok.Data;
 import pe.edu.upc.paymentservice.entities.Publicity;
 import pe.edu.upc.paymentservice.entities.Subscription;
@@ -9,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 @Data
+@Builder
 public class User {
     private Long id;
     private String fullName;

@@ -1,6 +1,7 @@
 package pe.edu.upc.paymentservice.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.paymentservice.client.UserClient;
 import pe.edu.upc.paymentservice.entities.Publicity;
@@ -21,10 +22,10 @@ public class PublicityServiceImpl implements PublicityService {
 
     @Override
     public Publicity save(Publicity entity) throws Exception {
-        User user = userClient.fetchById(entity.getUserId());
+        ResponseEntity<User> user = userClient.fetchById(entity.getUserId());
         publicityRepository.save(entity);
-        List<Publicity> publicities = getAllPublicitiesByUserId(user.getId());
-        user.setPublicities(publicities);
+        List<Publicity> publicities = getAllPublicitiesByUserId(user.getBody().getId());
+        user.getBody().setPublicities(publicities);
         System.out.println("aqui estan");
         System.out.println(publicities);
         userClient.updateUser(user, entity.getUserId());
