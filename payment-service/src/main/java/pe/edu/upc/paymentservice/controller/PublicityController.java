@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 @RequestMapping("/api")
 public class PublicityController {
@@ -47,8 +49,9 @@ public class PublicityController {
             @ApiResponse(responseCode = "200", description = "Publicity created", content = @Content(mediaType = "application/json")),
     })
     @PostMapping("/publicities")
-    public ResponseEntity<Publicity> createPublicity(@RequestBody Publicity publicity, BindingResult result) throws Exception {
+    public ResponseEntity<Publicity> createPublicity(@RequestBody Publicity publicity, BindingResult result) {
         if (result.hasErrors()) {
+            System.out.println("Estos son los errores" + result + result.hasErrors());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, this.formatMessage(result));
         }
         Publicity publicityDB = publicityService.save(publicity);
