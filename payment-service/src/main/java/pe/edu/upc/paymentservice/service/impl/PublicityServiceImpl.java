@@ -64,6 +64,12 @@ public class PublicityServiceImpl implements PublicityService {
 
     @Override
     public List<Publicity> getAllPublicitiesByUserId(Long userId) {
-        return publicityRepository.findByUserId(userId);
+        List<Publicity> publicities = publicityRepository.findByUserId(userId);
+        for (int i = 0; i < publicities.size(); i++) {
+            Publicity publicity = publicities.get(i);
+            User user = userClient.fetchById(publicity.getUserId()).getBody();
+            publicities.get(i).setUser(user);
+        }
+        return publicities;
     }
 }
