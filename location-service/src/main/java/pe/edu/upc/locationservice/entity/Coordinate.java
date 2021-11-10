@@ -36,6 +36,9 @@ public class Coordinate {
 
     private String status;
 
+    @Column(name = "user_id")
+    private Long userId;
+
     @Transient
     private User user;
 }
