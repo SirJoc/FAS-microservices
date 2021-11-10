@@ -4,9 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import upc.edu.pe.inventoryservice.client.UserClient;
 import upc.edu.pe.inventoryservice.entities.Category;
 import upc.edu.pe.inventoryservice.entities.Product;
 import upc.edu.pe.inventoryservice.exception.ResourceNotFoundException;
+import upc.edu.pe.inventoryservice.model.User;
 import upc.edu.pe.inventoryservice.repositories.CategoryRepository;
 import upc.edu.pe.inventoryservice.repositories.ProductRepository;
 import upc.edu.pe.inventoryservice.services.ProductService;
@@ -23,6 +25,9 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
 
     @Autowired
+    UserClient userClient;
+
+    @Autowired
     private CategoryRepository categoryRepository;
 
     @Transactional
@@ -34,13 +39,24 @@ public class ProductServiceImpl implements ProductService {
     @Transactional(readOnly = true)
     @Override
     public List<Product> findAll() throws Exception {
-        return productRepository.findAll();
+        List<Product> products = productRepository.findAll();
+        for (int i = 0; i < products.size(); i++) {
+            Product product = products.get(i);
+            User user = userClient.fetchById(product.getUserId()).getBody();
+            products.get(i).setUser(user);
+        }
+        return products;
     }
 
     @Transactional(readOnly = true)
     @Override
     public Optional<Product> findById(Long aLong) throws Exception {
-        return productRepository.findById(aLong);
+        Optional<Product> product = productRepository.findById(aLong);
+        if(product.isPresent()) {
+            User user = userClient.fetchById(product.get().getUserId()).getBody();
+            product.get().setUser(user);
+        }
+        return product;
     }
 
     @Override
