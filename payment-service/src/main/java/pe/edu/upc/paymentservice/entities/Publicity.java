@@ -26,4 +26,7 @@ public class Publicity {
 
     @Column(name = "user_id")
     private Long userId;
+
+    @Transient
+    private User user;
 }
