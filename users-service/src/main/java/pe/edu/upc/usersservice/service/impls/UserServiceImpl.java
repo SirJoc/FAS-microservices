@@ -41,8 +41,6 @@ public class UserServiceImpl implements UserService {
         user.setPassword(newEntity.getPassword());
         user.setRuc(newEntity.getRuc());
         System.out.println("AQui esta todo");
-        System.out.println(newEntity.getPublicities());
-        user.setPublicities(newEntity.getPublicities());
         return userRepository.save(user);
     }
 
