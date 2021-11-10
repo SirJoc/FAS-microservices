@@ -2,13 +2,9 @@ package pe.edu.upc.usersservice.entity;
 
 
 import lombok.Data;
-import pe.edu.upc.usersservice.model.Publicity;
-import pe.edu.upc.usersservice.model.Subscription;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -36,17 +32,6 @@ public class User {
 
     @Column(length = 20, nullable = true)
     private String status;
-
-    public List<Publicity> getPublicities() {
-        return publicities;
-    }
-
-    public void setPublicities(List<Publicity> publicities) {
-        this.publicities = publicities;
-    }
-
-    @Transient
-    private List<Publicity> publicities;
 
 
     public Long getId() {
