@@ -2,6 +2,7 @@ package pe.edu.upc.locationservice.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +19,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 //@Tag(name = "Coordinates", description = "Coordinate API")
+@Slf4j
 @RestController
-@RequestMapping("/coordinates")
+@RequestMapping("/api/coordinates")
 public class CoordinateController {
     @Autowired
     private CoordinateService coordinateService;

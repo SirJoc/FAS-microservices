@@ -19,5 +19,4 @@ public class User {
     private String ruc;
     private Date createAt;
     private String status;
-    private List<Publicity> publicities;
 }

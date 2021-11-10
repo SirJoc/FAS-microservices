@@ -1,8 +1,13 @@
 package pe.edu.upc.locationservice.model;
 
+import lombok.Builder;
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.Date;
 
+@Data
+@Builder
 public class User {
     private Long id;
     private String fullName;
