@@ -14,7 +14,7 @@ import upc.edu.pe.inventoryservice.services.ProductService;
 import javax.validation.Valid;
 import java.util.*;
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/api/products")
 public class ProductController {
 
     @Autowired
