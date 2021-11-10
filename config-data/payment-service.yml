@@ -51,6 +51,6 @@ management:
     web:
       exposure:
         include: "*"
-hystrix::
+hystrix:
   dashboard:
-    proxy-stream-allow-list: '*'
+    proxy-stream-allow-list: "*"
