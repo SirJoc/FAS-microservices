@@ -25,3 +25,7 @@ spring:
           uri: lb://location-service
           predicates:
             - Path=/api/coordinates/**
+        - id: inventory-service
+          uri: lb://inventory-service
+          predicates:
+            - Path=/api/categories/**,/api/products/**
