@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import pe.edu.upc.paymentservice.entities.Publicity;
 
 import java.util.List;
-@Repository
+
 public interface PublicityRepository extends JpaRepository<Publicity, Long> {
     public List<Publicity> findByUserId(Long userId);
 }
