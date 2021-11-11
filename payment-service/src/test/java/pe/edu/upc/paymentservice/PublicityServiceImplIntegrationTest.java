@@ -24,7 +24,7 @@ public class PublicityServiceImplIntegrationTest {
     @MockBean
     private PublicityRepository publicityRepository;
 
-    @Autowired
+    @MockBean
     private PublicityService publicityService;
 
     @TestConfiguration
@@ -48,7 +48,7 @@ public class PublicityServiceImplIntegrationTest {
         publicity.setMessage(message);
         publicity.setDuration(duration);
 
-        when(publicityRepository.findById(id)).thenReturn(Optional.of(publicity));
+        when(publicityService.findById(id)).thenReturn(Optional.of(publicity));
 
         //Act
         Optional<Publicity> foundPublicity = publicityService.findById(id);
@@ -70,7 +70,7 @@ public class PublicityServiceImplIntegrationTest {
         publicity.setMessage(message);
         publicity.setDuration(duration);
 
-        when(publicityRepository.findById(id)).thenReturn(Optional.empty());
+        when(publicityService.findById(id)).thenReturn(Optional.empty());
 
         //Act
         Throwable exception = catchThrowable(() -> {
