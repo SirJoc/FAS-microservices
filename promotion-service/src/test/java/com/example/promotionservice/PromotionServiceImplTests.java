@@ -9,10 +9,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -48,6 +51,39 @@ public class PromotionServiceImplTests {
         given(promotionRepository.findById(id)).willReturn(Optional.of(promotion));
         Promotion expected = promotionService.getPromotionById(id);
         assertThat(expected).isNotNull();
+    }
+
+    @Test
+    void findAllPromotions() throws Exception{
+        Promotion promotion = new Promotion();
+        promotion.setId(1L);
+        promotion.setStartDate("12/10/2020");
+        promotion.setEndDate("15/10/2020");
+        promotion.setType("uno");
+        Promotion promotion1 = new Promotion();
+        promotion.setId(2L);
+        promotion.setStartDate("13/10/2020");
+        promotion.setEndDate("14/10/2020");
+        promotion.setType("dos");
+        Promotion promotion2 = new Promotion();
+        promotion.setId(3L);
+        promotion.setStartDate("14/10/2020");
+        promotion.setEndDate("16/10/2020");
+        promotion.setType("tres");
+        List<Promotion> promotionList = new ArrayList<>();
+        promotionList.add(promotion);
+        promotionList.add(promotion1);
+        promotionList.add(promotion2);
+        given(promotionRepository.findAll()).willReturn(promotionList);
+        List<Promotion> expected = promotionService.getAllPromotions();
+        assertEquals(expected, promotionList);
+    }
+
+    @Test
+    void deletePromotion() throws Exception{
+        Long id = 1L;
+        promotionService.deletePromotion(id);
+        verify(promotionRepository, times(1)).deleteById(id);
     }
 }
 
