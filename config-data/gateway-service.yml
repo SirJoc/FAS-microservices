@@ -21,6 +21,10 @@ spring:
           uri: lb://user-service
           predicates:
             - Path=/api/users/**
+        - id: review-service
+          uri: lb://review-service
+          predicates:
+            - Path=/api/comments/**
         - id: location-service
           uri: lb://location-service
           predicates:
