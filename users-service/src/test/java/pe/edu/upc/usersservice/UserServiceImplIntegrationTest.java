@@ -3,10 +3,12 @@ package pe.edu.upc.usersservice;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.stubbing.OngoingStubbing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import pe.edu.upc.usersservice.entity.User;
 import pe.edu.upc.usersservice.exceptions.ResourceNotFoundException;
@@ -73,5 +75,71 @@ public class UserServiceImplIntegrationTest {
         assertThat(exception)
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessage(expectedMessage);
+    }
+    @Test
+    @DisplayName("When Create a User Then Returns a new User")
+    public void whenCreateUserThenReturnsNewUser(){
+        //Arrange
+        Long id = 1L;
+        String name = "Prueba1";
+        User user = new User();
+        user.setId(1L);
+        user.setFullName(name);
+
+        User newUser = new User();
+        newUser.setFullName(name);
+
+        when(userRepository.save(newUser))
+                .thenReturn(user);
+
+        //Act
+        User foundUser = userService.save(newUser);
+        //Assert
+        assertThat(foundUser.getId()).isEqualTo(id);
+    }
+
+    @Test
+    @DisplayName("When Update a User Then Returns a new User")
+    public void whenUpdateUserThenReturnsNewUser(){
+        //Arrange
+        Long id = 1L;
+        String name = "Prueba1";
+        User user = new User();
+        user.setId(1L);
+        user.setFullName(name);
+
+        User newUser = new User();
+        String name2 = "Prueba2";
+        newUser.setFullName(name2);
+
+        when(userRepository.findById(id))
+                .thenReturn(Optional.of(user));
+
+        when(userRepository.save(user))
+                .thenReturn(newUser);
+
+        //Act
+        User foundUser = userService.update(id,newUser);
+        //Assert
+        assertThat(foundUser.getFullName()).isEqualTo(name2);
+    }
+
+    @Test
+    @DisplayName("When Delete a User Then Returns a Response Entity")
+    public void whenDeleteUserThenReturnsResponseEntity(){
+        //Arrange
+        Long id = 1L;
+        String name = "Prueba1";
+        User user = new User();
+        user.setId(1L);
+        user.setFullName(name);
+
+        when(userRepository.findById(id))
+                .thenReturn(Optional.of(user));
+
+        //Act
+        ResponseEntity<?> foundUser = userService.delete(id);
+        //Assert
+        assertThat(foundUser).isNotNull();
     }
 }

@@ -2,6 +2,7 @@ package upc.edu.pe.inventoryservice.entities;
 
 import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
+import upc.edu.pe.inventoryservice.model.User;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -33,6 +34,12 @@ public class Product {
 
     @Column(length = 1, nullable = true)
     private String status;
+
+    @Column(name = "user_id")
+    private Long userId;
+
+    @Transient
+    private User user;
 
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {CascadeType.PERSIST, CascadeType.MERGE})

@@ -40,7 +40,6 @@ public class UserServiceImpl implements UserService {
         user.setEmail(newEntity.getEmail());
         user.setPassword(newEntity.getPassword());
         user.setRuc(newEntity.getRuc());
-        System.out.println("AQui esta todo");
         return userRepository.save(user);
     }
 

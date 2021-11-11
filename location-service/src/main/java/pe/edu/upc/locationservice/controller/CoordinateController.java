@@ -48,9 +48,27 @@ public class CoordinateController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Coordinate> updateProduct(@PathVariable("id") Long id, @RequestBody Coordinate coordinate){
+    public ResponseEntity<Coordinate> updateCoordinate(@PathVariable("id") Long id, @RequestBody Coordinate coordinate){
         coordinate.setId(id);
         Coordinate coordinateDB =  coordinateService.updateCoordinate(coordinate);
+        if (coordinateDB == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(coordinateDB);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Coordinate> deleteCoordinateById(@PathVariable("id") Long id){
+        Coordinate coordinateDB = coordinateService.deleteCoordinateById(id);
+        if (coordinateDB == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(coordinateDB);
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<Coordinate> fetchById(@PathVariable("id") Long id){
+        Coordinate coordinateDB = coordinateService.getCoordinateById(id);
         if (coordinateDB == null){
             return ResponseEntity.notFound().build();
         }
