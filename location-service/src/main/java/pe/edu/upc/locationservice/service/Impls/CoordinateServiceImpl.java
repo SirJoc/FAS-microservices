@@ -63,10 +63,10 @@ public class CoordinateServiceImpl implements CoordinateService {
     @Override
     public Coordinate deleteCoordinateById(Long id) {
         Coordinate coordinateDB = getCoordinateById(id);
-        if (null == coordinateDB){
-            return  null;
+        if (null != coordinateDB){
+            coordinateDB.setStatus("DELETED");
+            coordinateRepository.deleteById(id);
         }
-        coordinateDB.setStatus("DELETED");
-        return coordinateRepository.save(coordinateDB);
+        return coordinateDB;
     }
 }
