@@ -57,7 +57,9 @@ public class CoordinateServiceImplIntegrationTest {
         coordinate.setStatus(status);
 
 
+        coordinate.setUserId(1L);
         when(coordinateRepository.findById(id)).thenReturn(Optional.of(coordinate));
+
 
         //Act
         Coordinate foundCoordinate = coordinateService.getCoordinateById(id);
@@ -85,5 +87,35 @@ public class CoordinateServiceImplIntegrationTest {
         //Assert
         assertThat(exception).isEqualTo(null);
 
+    }
+
+    @Test
+    @DisplayName("When PostCoordinate With Valid Values Then Create Coordinate")
+    public void WhenPostCoordinateWithValidValuesThenCreateCoordinate() throws Exception {
+
+        Long id = 1L;
+        String description = "Envio a Edificio";
+        double longitude = 9.134213;
+        double latitude = 4.421213;
+        double altitude = 8.12344;
+        boolean favourite_route = true;
+        String status = "ENABLE";
+
+        Coordinate coordinate = new Coordinate();
+        coordinate.setId(id);
+        coordinate.setAltitude((float) altitude);
+        coordinate.setDescription(description);
+        coordinate.setFavorite_route(favourite_route);
+        coordinate.setLongitude((float) longitude);
+        coordinate.setLatitude((float) altitude);
+        coordinate.setStatus(status);
+
+        when(coordinateRepository.save(coordinate)).thenReturn(coordinate);
+
+        //Act
+        Coordinate create0Coordinate = coordinateService.createCoordinate(coordinate);
+
+        //Assert
+        assertThat(create0Coordinate.getStatus()).isEqualTo(status);
     }
 }

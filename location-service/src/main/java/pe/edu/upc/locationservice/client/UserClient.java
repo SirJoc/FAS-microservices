@@ -1,6 +1,7 @@
 package pe.edu.upc.locationservice.client;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import pe.edu.upc.locationservice.model.User;
 
+@Primary
 @FeignClient(name = "user-service", fallback = UserHystrixFallbackFactory.class)
 public interface UserClient {
     @GetMapping("/api/users/{id}")
