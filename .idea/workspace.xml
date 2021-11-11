@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="81c9373f-bb6d-465e-94b5-21aa705af74b" name="Default Changelist" comment="hot: Eureka" />
+    <list default="true" id="81c9373f-bb6d-465e-94b5-21aa705af74b" name="Default Changelist" comment="hot: Eureka">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_28_10_2021_23_12_[Default_Changelist]/shelved.patch" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -57,6 +59,7 @@
       <workItem from="1635481429931" duration="510000" />
       <workItem from="1635483669543" duration="88000" />
       <workItem from="1635485441835" duration="2127000" />
+      <workItem from="1636646698817" duration="8000" />
     </task>
     <task id="LOCAL-00001" summary="hot: Eureka">
       <created>1635480915034</created>
