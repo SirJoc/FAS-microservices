@@ -6,7 +6,6 @@ import pe.edu.upc.reviewservice.model.User;
 
 import javax.persistence.*;
 
-@Data
 @Entity
 @Table(name = "comments")
 public class Comment {
@@ -43,22 +42,6 @@ public class Comment {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public Long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Long productId) {
-        this.productId = productId;
     }
 
     public User getUser() {

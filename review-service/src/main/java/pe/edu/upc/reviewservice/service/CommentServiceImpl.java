@@ -16,6 +16,8 @@ import pe.edu.upc.reviewservice.repository.CommentRepository;
 import org.springframework.data.domain.Pageable;
 import pe.edu.upc.usersservice.exceptions.ResourceNotFoundException;
 
+import java.util.Objects;
+
 
 @Service
 public class CommentServiceImpl implements CommentService{
@@ -47,11 +49,11 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     public Comment create(Long userId, Long productId, Comment comment) {
-        if(userClient.getUser(userId).getStatusCode() != HttpStatus.OK){
+        if(Objects.requireNonNull(userClient.getUser(userId).getBody()).getId() == null){
             throw new ResourceNotFoundException("User","Id", userId);
         }
-        if(productClient.getProduct(productId).getStatusCode() != HttpStatus.OK){
-            throw new ResourceNotFoundException("User","Id", userId);
+        if(Objects.requireNonNull(productClient.getProduct(productId).getBody()).getId() == null){
+            throw new ResourceNotFoundException("Product","Id", productId);
         }
         User user = userClient.getUser(userId).getBody();
         Product product = productClient.getProduct(productId).getBody();
