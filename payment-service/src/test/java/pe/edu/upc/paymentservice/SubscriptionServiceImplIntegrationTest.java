@@ -63,7 +63,6 @@ public class SubscriptionServiceImplIntegrationTest {
         // Arrange
         Long id = 1L;
         String type = "Premium";
-
         Subscription subscription = new Subscription();
         subscription.setId(id);
         subscription.setType(type);
@@ -80,4 +79,62 @@ public class SubscriptionServiceImplIntegrationTest {
         assertThat(exception.getMessage()).isEqualTo("No value present");
     }
 
+    @Test
+    @DisplayName("DELETE service")
+    public void WhenDeleteASubscriptionItGetsNoValuePresent() throws Exception {
+        // Arrange
+        Long id = 1L;
+        String type = "Premium";
+        Subscription subscription = new Subscription();
+        subscription.setId(id);
+        subscription.setType(type);
+        when(subscriptionRepository.findById(id)).thenReturn(Optional.of(subscription));
+        subscriptionService.deleteById(id);
+        when(subscriptionRepository.findById(id)).thenReturn(Optional.empty());
+        Throwable exception = catchThrowable(() -> {
+            Optional<Subscription> subscription1 = subscriptionService.findById(id);
+            subscription1.get();
+        });
+        assertThat(exception.getMessage()).isEqualTo("No value present");
+    }
+
+
+    @Test
+    @DisplayName("Create service")
+    public void WhenCreateASubscriptionGetsOk() throws Exception {
+        // Arrange
+        Long id = 1L;
+        String type = "Premium";
+        Subscription subscription = new Subscription();
+        subscription.setId(id);
+        subscription.setType(type);
+
+        when(subscriptionRepository.save(subscription)).thenReturn(subscription);
+        Subscription result = subscriptionService.save(subscription);
+        assertThat(result.getType()).isEqualTo(subscription.getType());
+    }
+
+
+    @Test
+    @DisplayName("UPDATE service")
+    public void WhenUpdateASubcriptionGetsOk() throws Exception {
+        Long id = 1L;
+        String type = "Premium";
+        Subscription subscription = new Subscription();
+        subscription.setId(id);
+        subscription.setType(type);
+
+        when(subscriptionRepository.save(subscription)).thenReturn(subscription);
+
+        String newType = "Regular";
+        Long newId = 1L;
+
+        Subscription subscription1 = new Subscription();
+        subscription1.setId(newId);
+        subscription1.setType(newType);
+        when(subscriptionRepository.save(subscription)).thenReturn(subscription1);
+        when(subscriptionRepository.findById(subscription.getId())).thenReturn(Optional.of(subscription1));
+        assertThat(subscriptionService.findById(id).get().getType()).isEqualTo(subscription1.getType());
+
+    }
 }
