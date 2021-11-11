@@ -12,8 +12,6 @@ public class ProductResource {
     private String description;
     private String corporation;
     private Double price;
-    private Date createAt;
-    private String status;
 
     public Long getId() {
         return id;
@@ -57,24 +55,6 @@ public class ProductResource {
 
     public ProductResource setPrice(Double price) {
         this.price = price;
-        return this;
-    }
-
-    public Date getCreateAt() {
-        return createAt;
-    }
-
-    public ProductResource setCreateAt(Date createAt) {
-        this.createAt = createAt;
-        return this;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public ProductResource setStatus(String status) {
-        this.status = status;
         return this;
     }
 }

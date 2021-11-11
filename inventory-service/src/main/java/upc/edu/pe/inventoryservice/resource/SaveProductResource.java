@@ -7,8 +7,6 @@ public class SaveProductResource {
     private String description;
     private String corporation;
     private Double price;
-    private Date createAt;
-    private String status;
 
     public String getName() {
         return name;
@@ -43,24 +41,6 @@ public class SaveProductResource {
 
     public SaveProductResource setPrice(Double price) {
         this.price = price;
-        return this;
-    }
-
-    public Date getCreateAt() {
-        return createAt;
-    }
-
-    public SaveProductResource setCreateAt(Date createAt) {
-        this.createAt = createAt;
-        return this;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public SaveProductResource setStatus(String status) {
-        this.status = status;
         return this;
     }
 }
