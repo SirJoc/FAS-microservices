@@ -14,6 +14,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
+import static org.mockito.Mockito.when;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.*;
@@ -81,9 +83,19 @@ public class PromotionServiceImplTests {
 
     @Test
     void deletePromotion() throws Exception{
-        Long id = 1L;
-        promotionService.deletePromotion(id);
-        verify(promotionRepository, times(1)).deleteById(id);
+        Promotion promotion = new Promotion();
+        promotion.setId(1L);
+        promotion.setStartDate("12/10/2020");
+        promotion.setEndDate("15/10/2020");
+        promotion.setType("uno");
+
+        when(promotionRepository.findById(1L)).thenReturn(Optional.of(promotion));
+        promotionService.deletePromotion(1L);
+        when(promotionRepository.findById(1L)).thenReturn(Optional.empty());
+        Throwable exception = catchThrowable(() -> {
+            Promotion promotion1 = promotionService.getPromotionById(1L);
+        });
+        assertThat(exception.getMessage()).isEqualTo("Resource Promotion not found for id with value 1");
     }
 }
 
