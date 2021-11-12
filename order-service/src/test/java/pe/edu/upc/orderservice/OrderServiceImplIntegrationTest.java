@@ -12,10 +12,10 @@ import pe.edu.upc.orderservice.entities.Order;
 import pe.edu.upc.orderservice.repositories.OrderRepository;
 import pe.edu.upc.orderservice.services.OrderService;
 import pe.edu.upc.orderservice.services.impls.OrderServiceImpl;
-
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
@@ -68,4 +68,64 @@ public class OrderServiceImplIntegrationTest {
         //Assert
         assertThat(foundOrder.getStatus()).isEqualTo(status);
     }
+
+    @Test
+    @DisplayName("DELETE service")
+    public void WhenDeleteAOrderItGetsNoValuePresent() throws Exception {
+        //Arrange
+        Long id = 1L;
+        Order order = new Order();
+        order.setId(id);
+
+        when(orderRepository.findById(id)).thenReturn(Optional.of(order));
+        orderRepository.deleteById(id);
+        when(orderRepository.findById(id)).thenReturn(Optional.empty());
+        Throwable exception = catchThrowable(() -> {
+            Optional<Order> order1 = orderRepository.findById(id);
+            order1.get();
+        });
+        assertThat(exception.getMessage()).isEqualTo("No value present");
+    }
+
+
+    @Test
+    @DisplayName("Create service")
+    public void WhenCreateAOrderGetsOk() throws Exception {
+        //Arrange
+        Long id = 1L;
+        Order order = new Order();
+        order.setId(id);
+
+        when(orderRepository.save(order)).thenReturn(order);
+        Order result = orderRepository.save(order);
+        assertThat(result.getStatus()).isEqualTo(order.getStatus());
+    }
+
+    @Test
+    @DisplayName("UPDATE service")
+    public void WhenUpdateAOrderGetsOk() throws Exception {
+        //Arrange
+        Long id = 1L;
+        Order order = new Order();
+        order.setId(id);
+
+        when(orderRepository.save(order)).thenReturn(order);
+
+
+        Long id1 = 1L;
+        String message1  = "Buenas tardes";
+        int duration1 = 1;
+        Order order1 = new Order();
+        order1.setId(id1);
+
+
+
+
+        when(orderRepository.save(order)).thenReturn(order1);
+        when(orderRepository.findById(order.getId())).thenReturn(Optional.of(order1));
+        assertThat(orderRepository.findById(id).get().getStatus()).isEqualTo(order1.getStatus());
+
+    }
+    
+    
 }
