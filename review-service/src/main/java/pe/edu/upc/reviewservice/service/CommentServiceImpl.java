@@ -3,18 +3,17 @@ package pe.edu.upc.reviewservice.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.reviewservice.client.ProductClient;
 import pe.edu.upc.reviewservice.client.UserClient;
 import pe.edu.upc.reviewservice.entity.Comment;
+import pe.edu.upc.reviewservice.exceptions.ResourceNotFoundException;
 import pe.edu.upc.reviewservice.model.Product;
 import pe.edu.upc.reviewservice.model.User;
 import pe.edu.upc.reviewservice.repository.CommentRepository;
 
 import org.springframework.data.domain.Pageable;
-import pe.edu.upc.usersservice.exceptions.ResourceNotFoundException;
 
 import java.util.Objects;
 
