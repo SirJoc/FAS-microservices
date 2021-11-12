@@ -37,3 +37,7 @@ spring:
           uri: lb://order-service
           predicates:
             - Path=/api/orders/**
+        - id: promotion-service
+          uri: lb://promotion-service
+          predicates:
+            - Path=/api/promotions/**
