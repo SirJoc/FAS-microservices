@@ -4,11 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import upc.edu.pe.inventoryservice.entities.Category;
+import upc.edu.pe.inventoryservice.exception.ResourceNotFoundException;
 import upc.edu.pe.inventoryservice.repositories.CategoryRepository;
 import upc.edu.pe.inventoryservice.services.CategoryService;
 
 import java.util.List;
 import java.util.Optional;
+
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -18,30 +20,32 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Transactional
     @Override
-    public Category save(Category entity) throws Exception{
+    public Category save(Category entity){
+        entity.setStatus("1");
         return categoryRepository.save(entity);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<Category> findAll() throws Exception {
+    public List<Category> findAll()   {
         return categoryRepository.findAll();
     }
 
     @Transactional(readOnly = true)
     @Override
-    public Optional<Category> findById(Long aLong) throws Exception {
-        return categoryRepository.findById(aLong);
+    public Category findById(Long aLong)  {
+        return categoryRepository.findById(aLong)
+                .orElseThrow(() -> new ResourceNotFoundException("Category", "Id", aLong));
     }
 
     @Transactional
     @Override
-    public Category update(Category entity) throws Exception {
+    public Category update(Category entity)   {
         return categoryRepository.save(entity);
     }
 
     @Override
-    public void deleteById(Long aLong) throws Exception {
+    public void deleteById(Long aLong)   {
         categoryRepository.findById(aLong);
     }
 }

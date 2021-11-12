@@ -12,7 +12,7 @@ import java.util.Set;
 @Entity
 @Table(name = "products")
 @Data
-public class Product {
+public class Product extends AuditModel{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,13 +27,6 @@ public class Product {
     private String corporation;
 
     private Double price;
-
-    @Column(name = "create_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createAt;
-
-    @Column(length = 1, nullable = true)
-    private String status;
 
     @Column(name = "user_id")
     private Long userId;

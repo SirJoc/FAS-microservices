@@ -1,15 +1,11 @@
 package upc.edu.pe.inventoryservice.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import upc.edu.pe.inventoryservice.entities.Category;
 import upc.edu.pe.inventoryservice.resource.CategoryResource;
 import upc.edu.pe.inventoryservice.resource.SaveCategoryResource;
@@ -18,10 +14,9 @@ import upc.edu.pe.inventoryservice.services.CategoryService;
 
 import javax.validation.Valid;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/categories")
+@RequestMapping("/api")
 public class CategoryController {
 
     @Autowired
@@ -30,13 +25,13 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @GetMapping(path = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+
+    @GetMapping(path = "/categories/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CategoryResource> fetchById(@PathVariable("id") Long id) {
         try {
-            Optional<Category> optionalCategory = categoryService.findById(id);
-            if (optionalCategory.isPresent()){
-                return new ResponseEntity<CategoryResource>(convertToResource(optionalCategory.get()) , HttpStatus.OK);
-//                return new ResponseEntity<Category>(optionalCategory.get(), HttpStatus.OK);
+            Category category = categoryService.findById(id);
+            if (category != null){
+                return new ResponseEntity<CategoryResource>(convertToResource(category) , HttpStatus.OK);
 
             }else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -46,8 +41,8 @@ public class CategoryController {
         }
     }
 
-    @GetMapping
-    public ResponseEntity<List<CategoryResource>> fetchAllCategory() throws Exception {
+    @GetMapping(path = "/categories")
+    public ResponseEntity<List<CategoryResource>> fetchAllCategory()  {
         List<Category> categories = new ArrayList<>();
         categories = categoryService.findAll();
         if (categories.isEmpty()){
@@ -56,11 +51,10 @@ public class CategoryController {
         return ResponseEntity.ok(convertListToListResource(categories));
     }
 
-    @PostMapping
-    public CategoryResource createCategory(@Valid @RequestBody SaveCategoryResource resource) throws Exception {
+    @PostMapping(path = "/categories")
+    public CategoryResource createCategory(@Valid @RequestBody SaveCategoryResource resource)   {
         return convertToResource(categoryService.save(convertToEntity(resource)));
     }
-
 
     private Category convertToEntity(SaveCategoryResource resource) {
         return mapper.map(resource, Category.class);
