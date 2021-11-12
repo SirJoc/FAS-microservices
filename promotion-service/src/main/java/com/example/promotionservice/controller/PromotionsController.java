@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 
 @RestController
-@RequestMapping(value = "/promotions")
+@RequestMapping(value = "/api/promotions")
 public class PromotionsController {
    @Autowired
    private PromotionService promotionService;
