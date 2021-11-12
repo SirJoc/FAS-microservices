@@ -42,7 +42,7 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public Page<Comment> findAllByProduct(Pageable pageable, Long productId) {
+    public Page<Comment> findAllByProductId(Pageable pageable, Long productId) {
         return commentRepository.findAllByProductId(pageable,productId);
     }
 

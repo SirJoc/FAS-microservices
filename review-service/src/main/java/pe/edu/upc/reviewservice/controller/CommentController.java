@@ -37,6 +37,31 @@ public class CommentController {
         return new PageImpl<>(resources,pageable, resources.size());
     }
 
+    @GetMapping("/users/{userId}/comments")
+    public Page<CommentResource> getAllCommentsByUser(Pageable pageable,
+                                                      @PathVariable Long userId){
+        Page<Comment> commentPage = commentService.findAllByUserId(pageable,userId);
+
+        List<CommentResource> resources = commentPage.getContent()
+                .stream()
+                .map(this::convertToResource)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(resources,pageable, resources.size());
+    }
+    @GetMapping("/products/{productId}/comments")
+    public Page<CommentResource> getAllCommentsByProduct(Pageable pageable,
+                                                      @PathVariable Long productId){
+        Page<Comment> commentPage = commentService.findAllByProductId(pageable,productId);
+
+        List<CommentResource> resources = commentPage.getContent()
+                .stream()
+                .map(this::convertToResource)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(resources,pageable, resources.size());
+    }
+
     @GetMapping("/comments/{id}")
     public CommentResource fetchById(@PathVariable(name = "id") Long id){
         return convertToResource(commentService.findById(id));
