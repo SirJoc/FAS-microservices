@@ -48,7 +48,7 @@ public class SubscriptionController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Subscription created", content = @Content(mediaType = "application/json")),
     })
-    @PostMapping("/users/{id}/subscriptions")
+    @PostMapping("/subscriptions")
     public ResponseEntity<Subscription> createSubscription(@PathVariable("id") long userId, @RequestBody Subscription subscription, BindingResult result) throws Exception {
         if (result.hasErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, this.formatMessage(result));
