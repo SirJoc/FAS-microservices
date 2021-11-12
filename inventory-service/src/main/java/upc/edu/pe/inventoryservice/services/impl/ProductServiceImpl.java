@@ -32,13 +32,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     @Override
-    public Product save(Product entity) throws Exception {
+    public Product save(Product entity)   {
+        entity.setStatus("1");
         return productRepository.save(entity);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<Product> findAll() throws Exception {
+    public List<Product> findAll() {
         List<Product> products = productRepository.findAll();
         for (int i = 0; i < products.size(); i++) {
             Product product = products.get(i);
@@ -50,22 +51,23 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional(readOnly = true)
     @Override
-    public Optional<Product> findById(Long aLong) throws Exception {
-        Optional<Product> product = productRepository.findById(aLong);
-        if(product.isPresent()) {
-            User user = userClient.fetchById(product.get().getUserId()).getBody();
-            product.get().setUser(user);
+    public Product findById(Long aLong)  {
+        Product product = productRepository.findById(aLong)
+                .orElseThrow(() -> new ResourceNotFoundException("Product", "Id", aLong));
+        if(product != null) {
+            User user = userClient.fetchById(product.getUserId()).getBody();
+            product.setUser(user);
         }
         return product;
     }
 
     @Override
-    public Product update(Product entity) throws Exception {
+    public Product update(Product entity)   {
         return productRepository.save(entity);
     }
 
     @Override
-    public void deleteById(Long aLong) throws Exception {
+    public void deleteById(Long aLong)   {
         productRepository.deleteById(aLong);
     }
 
@@ -83,5 +85,13 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findById(productId)
                 .map(product -> productRepository.save(product.unCategoryWith(category)))
                 .orElseThrow(() -> new ResourceNotFoundException("Product", "Id", productId));
+    }
+
+    @Override
+    public List<Product> getAllProductsByCategoryId(Long categoryId) {
+        return categoryRepository.findById(categoryId).map(category -> {
+            List<Product> products = category.getProducts();
+            return products;
+        }).orElseThrow(() -> new ResourceNotFoundException("Category", "Id", categoryId));
     }
 }

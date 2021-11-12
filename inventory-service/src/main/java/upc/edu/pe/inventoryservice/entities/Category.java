@@ -11,7 +11,7 @@ import java.util.Set;
 @Entity
 @Table(name = "categories")
 @Data
-public class Category {
+public class Category extends AuditModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,13 +21,6 @@ public class Category {
 
     @Column(length = 200, nullable = false)
     private String description;
-
-    @Column(name = "create_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createAt;
-
-    @Column(length = 1, nullable = true)
-    private String status;
 
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE},

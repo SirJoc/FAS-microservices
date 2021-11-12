@@ -7,7 +7,8 @@ public class SaveProductResource {
     private String description;
     private String corporation;
     private Double price;
-    private Date createAt;
+    private Date createdAt;
+    private Date updatedAt;
     private String status;
 
     public String getName() {
@@ -46,21 +47,27 @@ public class SaveProductResource {
         return this;
     }
 
-    public Date getCreateAt() {
-        return createAt;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public SaveProductResource setCreateAt(Date createAt) {
-        this.createAt = createAt;
-        return this;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public String getStatus() {
         return status;
     }
 
-    public SaveProductResource setStatus(String status) {
+    public void setStatus(String status) {
         this.status = status;
-        return this;
     }
 }
