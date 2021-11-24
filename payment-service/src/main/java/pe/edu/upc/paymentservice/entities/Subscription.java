@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pe.edu.upc.paymentservice.model.User;
 
 import javax.persistence.*;
 
@@ -19,6 +20,9 @@ public class Subscription {
     @Column(length = 40, nullable = false)
     private String type;
 
-//    @Transient
-//    private User user;
+    @Column(name = "user_id")
+    private Long userId;
+
+    @Transient
+    private User user;
 }

@@ -2,7 +2,6 @@ package pe.edu.upc.paymentservice.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -65,19 +64,8 @@ public class PublicityController {
             @ApiResponse(responseCode = "200", description = "publicity Updated", content = @Content(mediaType = "application/json")),
     })
     @PutMapping(value = "/publicities/{id}")
-    public ResponseEntity<Publicity> updatePublicity(@PathVariable("id") long id, @RequestBody Publicity entity) {
-        try {
-            Optional<Publicity> publicity = publicityService.findById(id);
-            if (publicity.isPresent()) {
-                publicity = convertToEntity(entity);
-                return ResponseEntity.ok(publicity.get());
-            }else {
-                return ResponseEntity.notFound().build();
-            }
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public Publicity updatePublicity(@PathVariable("id") long id, @RequestBody Publicity entity) throws Exception {
+        return publicityService.update(id, entity);
 
     }
 
