@@ -48,7 +48,7 @@ public class SubscriptionController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Subscription created", content = @Content(mediaType = "application/json")),
     })
-    @PostMapping("/subscriptions")
+    @PostMapping("/subscriptions/users/{id}")
     public ResponseEntity<Subscription> createSubscription(@PathVariable("id") long userId, @RequestBody Subscription subscription, BindingResult result) throws Exception {
         if (result.hasErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, this.formatMessage(result));
@@ -63,20 +63,8 @@ public class SubscriptionController {
             @ApiResponse(responseCode = "200", description = "Subscription Updated", content = @Content(mediaType = "application/json")),
     })
     @PutMapping(value = "/subscriptions/{id}")
-    public ResponseEntity<Subscription> updateSubscription(@PathVariable("id") long id, @RequestBody Subscription entity) {
-        try {
-            Optional<Subscription> subscription = subscriptionService.findById(id);
-            if (subscription.isPresent()) {
-                subscription = convertToEntity(entity);
-                return ResponseEntity.ok(subscription.get());
-            }else {
-                return ResponseEntity.notFound().build();
-            }
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
+    public Subscription updateSubscription(@PathVariable("id") long id, @RequestBody Subscription entity) throws Exception {
+        return subscriptionService.update(id, entity);
     }
 
 
@@ -128,6 +116,11 @@ public class SubscriptionController {
             e.printStackTrace();
         }
         return jsonString;
+    }
+
+    @RequestMapping(value = "/subscriptions/users/{id}")
+    public List<Subscription> getSubscriptionsByUserId(@PathVariable("id") Long userId) throws Exception {
+        return subscriptionService.getAllSubscriptionsByUserId(userId);
     }
 
     private Optional<Subscription> convertToEntity(Subscription resource) {

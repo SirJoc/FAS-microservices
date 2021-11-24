@@ -53,8 +53,15 @@ public class PublicityServiceImpl implements PublicityService {
     }
 
     @Override
-    public Publicity update(Publicity entity) throws Exception {
-        return publicityRepository.save(entity);
+    public Publicity update(Long id, Publicity entity) throws Exception {
+        Publicity publicity = publicityRepository.findById(id).get();
+        if (publicity !=  null){
+            publicity.setDuration(entity.getDuration());
+            publicity.setMessage(entity.getMessage());
+            publicity.setUserId(entity.getUserId());
+            return publicityRepository.save(publicity);
+        }
+        return publicity;
     }
 
     @Override
