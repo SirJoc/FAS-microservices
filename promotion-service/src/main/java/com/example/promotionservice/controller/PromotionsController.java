@@ -63,12 +63,9 @@ public class PromotionsController {
    @ApiResponses(value = {
            @ApiResponse(responseCode = "200", description = "Promotion deleted", content = @Content(mediaType = "application/json")),
    })
-   public ResponseEntity<Promotion> deleteProduct(@PathVariable("id") Long id){
-       Promotion promotionDelete = promotionService.deletePromotion(id);
-       if(promotionDelete == null){
-           return ResponseEntity.notFound().build();
-       }
-       return ResponseEntity.ok(promotionDelete);
+   public ResponseEntity<String> deleteProduct(@PathVariable("id") Long id){
+       promotionService.deletePromotion(id);
+       return ResponseEntity.ok("DELETED");
    }
 
    @PostMapping

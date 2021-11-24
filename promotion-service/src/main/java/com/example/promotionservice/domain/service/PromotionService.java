@@ -12,5 +12,5 @@ public interface PromotionService {
     public List<Promotion> getAllPromotions();
     public Promotion createPromotion(Promotion promotion);
     public Promotion updatePromotion(Promotion promotion);
-    public Promotion deletePromotion(Long id);
+    public void deletePromotion(Long id);
 }
