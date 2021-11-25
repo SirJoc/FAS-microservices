@@ -31,6 +31,9 @@ public class Product extends AuditModel{
     @Column(name = "user_id")
     private Long userId;
 
+    @Column(name = "order_id")
+    private Long orderId;
+
     @Transient
     private User user;
 

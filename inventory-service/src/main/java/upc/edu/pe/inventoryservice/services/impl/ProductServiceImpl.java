@@ -62,8 +62,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product update(Product entity)   {
-        return productRepository.save(entity);
+    public Product update(Long id, Product entity)   {
+        Product product = productRepository.findById(id).get();
+        product.setCorporation(entity.getCorporation());
+        product.setPrice(entity.getPrice());
+        product.setName(entity.getName());
+        return productRepository.save(product);
     }
 
     @Override
@@ -93,5 +97,11 @@ public class ProductServiceImpl implements ProductService {
             List<Product> products = category.getProducts();
             return products;
         }).orElseThrow(() -> new ResourceNotFoundException("Category", "Id", categoryId));
+    }
+
+    @Override
+    public List<Product> findAllByOdId(Long orderId) {
+        List<Product> products = productRepository.findAllByOrderId(orderId);
+        return products;
     }
 }
