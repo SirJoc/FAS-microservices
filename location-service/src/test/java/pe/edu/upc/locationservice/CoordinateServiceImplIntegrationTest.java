@@ -1,13 +1,18 @@
 package pe.edu.upc.locationservice;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import pe.edu.upc.locationservice.client.UserClient;
 import pe.edu.upc.locationservice.entity.Coordinate;
+import pe.edu.upc.locationservice.model.User;
 import pe.edu.upc.locationservice.repository.CoordinateRepository;
 import pe.edu.upc.locationservice.service.CoordinateService;
 import pe.edu.upc.locationservice.service.Impls.CoordinateServiceImpl;
@@ -22,9 +27,11 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 public class CoordinateServiceImplIntegrationTest {
     @MockBean
     private CoordinateRepository coordinateRepository;
-    @MockBean
+    @Autowired
     private CoordinateService coordinateService;
-
+    @MockBean
+    @Qualifier("pe.edu.upc.paymentservice.client.UserClient")
+    private UserClient userClient;
     @TestConfiguration
     static class PublicityImplTestConfiguration{
         @Bean
@@ -55,9 +62,12 @@ public class CoordinateServiceImplIntegrationTest {
         coordinate.setLongitude((float) longitude);
         coordinate.setLatitude((float) altitude);
         coordinate.setStatus(status);
+        coordinate.setUserId(1L);
+        User user = User.builder().fullName("none").id(coordinate.getUserId()).build();
 
 
-        when(coordinateService.getCoordinateById(id)).thenReturn(coordinate);
+        when(userClient.fetchById(coordinate.getUserId())).thenReturn(ResponseEntity.of(Optional.of(user)));
+        when(coordinateRepository.findById(id)).thenReturn(Optional.of(coordinate));
 
         //Act
         Coordinate foundCoordinate = coordinateService.getCoordinateById(id);
@@ -108,16 +118,19 @@ public class CoordinateServiceImplIntegrationTest {
         coordinate.setLongitude((float) longitude);
         coordinate.setLatitude((float) altitude);
         coordinate.setStatus(status);
+        coordinate.setUserId(1L);
+        User user = User.builder().fullName("none").id(coordinate.getUserId()).build();
+        when(userClient.fetchById(coordinate.getUserId())).thenReturn(ResponseEntity.of(Optional.of(user)));
 
 
-        when(coordinateService.getCoordinateById(id)).thenReturn(coordinate);
+        when(coordinateRepository.findById(id)).thenReturn(Optional.of(coordinate));
         coordinateService.deleteCoordinateById(id);
-        when(coordinateService.getCoordinateById(id)).thenReturn(null);
+        when(coordinateRepository.findById(id)).thenReturn(null);
         Throwable exception = catchThrowable(() -> {
             Optional<Coordinate> coordinate1 = coordinateRepository.findById(id);
             coordinate1.get();
         });
-        assertThat(exception.getMessage()).isEqualTo("No value present");
+        assertThat(exception.getMessage()).isEqualTo(null);
     }
     @Test
     @DisplayName("Create Coordinate")
@@ -143,7 +156,7 @@ public class CoordinateServiceImplIntegrationTest {
         coordinate.setStatus(status);
 
 
-        when(coordinateService.createCoordinate(coordinate)).thenReturn(coordinate);
+        when(coordinateRepository.save(coordinate)).thenReturn(coordinate);
         Coordinate result = coordinateService.createCoordinate(coordinate);
         assertThat(result.getStatus()).isEqualTo(coordinate.getStatus());
     }
@@ -170,10 +183,10 @@ public class CoordinateServiceImplIntegrationTest {
         coordinate.setLongitude((float) longitude);
         coordinate.setLatitude((float) altitude);
         coordinate.setStatus(status);
+        coordinate.setUserId(1L);
 
 
-
-        when(coordinateService.updateCoordinate(coordinate)).thenReturn(coordinate);
+        when(coordinateRepository.save(coordinate)).thenReturn(coordinate);
         Long id1 = 1L;
         String description1 = "San Juan de Viva Cristo Rey";
         double longitude1 = 5.124213;
@@ -190,11 +203,13 @@ public class CoordinateServiceImplIntegrationTest {
         coordinate1.setLongitude((float) longitude);
         coordinate1.setLatitude((float) altitude);
         coordinate1.setStatus(status);
+        coordinate1.setUserId(1L);
+        User user = User.builder().fullName("none").id(coordinate.getUserId()).build();
+        when(userClient.fetchById(coordinate.getUserId())).thenReturn(ResponseEntity.of(Optional.of(user)));
 
-        when(coordinateService.updateCoordinate(coordinate)).thenReturn(coordinate1);
+        when(coordinateRepository.save(coordinate)).thenReturn(coordinate1);
         Coordinate result = coordinateService.updateCoordinate(coordinate);
-        assertThat(result.getStatus()).isEqualTo(coordinate.getStatus());
-        when(coordinateService.getCoordinateById(coordinate.getId())).thenReturn(coordinate1);
+        when(coordinateRepository.findById(coordinate.getId())).thenReturn(Optional.of(coordinate1));
         assertThat(coordinateService.getCoordinateById(id).getStatus()).isEqualTo(coordinate1.getStatus());
     }
 
