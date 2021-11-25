@@ -52,6 +52,12 @@ public class ProductController {
         return convertToResource(productService.save(convertToEntity(resource)));
     }
 
+    @PutMapping("/products/{id}")
+    public ProductResource updateProduct(@Valid @RequestBody SaveProductResource resource,@PathVariable(name = "id") Long id){
+        Product product = convertToEntity(resource);
+        return convertToResource(productService.update(id,product));
+    }
+
 
     // PRODUCT-CATEGORY
     @PostMapping(path = "/assign", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -69,6 +75,12 @@ public class ProductController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(convertListToListResource(products));
+    }
+
+    @DeleteMapping("/products/{id}")
+    public ResponseEntity<?> deleteProduct(@PathVariable(name = "id") Long id){
+        productService.deleteById(id);
+        return ResponseEntity.ok("DELETED");
     }
 
 

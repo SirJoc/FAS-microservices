@@ -40,12 +40,15 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Transactional
     @Override
-    public Category update(Category entity)   {
-        return categoryRepository.save(entity);
+    public Category update(Long id, Category entity)   {
+        Category category = categoryRepository.findById(id).get();
+        category.setName(entity.getName());
+        category.setDescription(entity.getDescription());
+        return categoryRepository.save(category);
     }
 
     @Override
     public void deleteById(Long aLong)   {
-        categoryRepository.findById(aLong);
+        categoryRepository.deleteById(aLong);
     }
 }
