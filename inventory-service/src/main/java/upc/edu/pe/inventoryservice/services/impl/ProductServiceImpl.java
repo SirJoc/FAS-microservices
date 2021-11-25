@@ -98,4 +98,10 @@ public class ProductServiceImpl implements ProductService {
             return products;
         }).orElseThrow(() -> new ResourceNotFoundException("Category", "Id", categoryId));
     }
+
+    @Override
+    public List<Product> findAllByOdId(Long orderId) {
+        List<Product> products = productRepository.findAllByOrderId(orderId);
+        return products;
+    }
 }

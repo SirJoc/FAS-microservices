@@ -7,6 +7,18 @@ public class SaveProductResource {
     private String description;
     private String corporation;
     private Double price;
+    private Long orderId;
+
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public SaveProductResource setOrderId(Long orderId) {
+        this.orderId = orderId;
+        return this;
+    }
+
+
 
     public String getName() {
         return name;

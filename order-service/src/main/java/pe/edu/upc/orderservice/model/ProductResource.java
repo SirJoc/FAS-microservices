@@ -1,10 +1,4 @@
-package upc.edu.pe.inventoryservice.resource;
-
-import upc.edu.pe.inventoryservice.entities.Category;
-
-import javax.persistence.*;
-import java.util.Date;
-import java.util.List;
+package pe.edu.upc.orderservice.model;
 
 public class ProductResource {
     private Long id;

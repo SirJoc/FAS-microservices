@@ -47,6 +47,16 @@ public class ProductController {
         return ResponseEntity.ok(convertListToListResource(products));
     }
 
+    @GetMapping(path = "/products/order-details/{id}")
+    public ResponseEntity<List<Product>> fetchAllProductByOrderDetailId(@PathVariable(name = "id") Long id )   {
+        List<Product> products = new ArrayList<>();
+        products = productService.findAllByOdId(id);
+        if (products.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(products);
+    }
+
     @PostMapping(path = "/products")
     public ProductResource createProduct(@Valid @RequestBody SaveProductResource resource) throws Exception {
         return convertToResource(productService.save(convertToEntity(resource)));
