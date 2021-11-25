@@ -4,12 +4,16 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import pe.edu.upc.paymentservice.client.UserClient;
 import pe.edu.upc.paymentservice.entities.Publicity;
 import pe.edu.upc.paymentservice.entities.Subscription;
+import pe.edu.upc.paymentservice.model.User;
 import pe.edu.upc.paymentservice.repository.PublicityRepository;
 import pe.edu.upc.paymentservice.service.PublicityService;
 import pe.edu.upc.paymentservice.service.impl.PublicityServiceImpl;
@@ -25,8 +29,12 @@ public class PublicityServiceImplIntegrationTest {
     @MockBean
     private PublicityRepository publicityRepository;
 
-    @MockBean
+    @Autowired
     private PublicityService publicityService;
+
+    @MockBean
+    @Qualifier("pe.edu.upc.paymentservice.client.UserClient")
+    private UserClient userClient;
 
     @TestConfiguration
     static class PublicityImplTestConfiguration{
@@ -48,9 +56,10 @@ public class PublicityServiceImplIntegrationTest {
         publicity.setId(id);
         publicity.setMessage(message);
         publicity.setDuration(duration);
-
-        when(publicityService.findById(id)).thenReturn(Optional.of(publicity));
-
+        publicity.setUserId(1L);
+        User user = User.builder().fullName("none").id(publicity.getUserId()).build();
+        when(publicityRepository.findById(id)).thenReturn(Optional.of(publicity));
+        when(userClient.fetchById(publicity.getUserId())).thenReturn(ResponseEntity.of(Optional.of(user)));
         //Act
         Optional<Publicity> foundPublicity = publicityService.findById(id);
 
@@ -71,7 +80,7 @@ public class PublicityServiceImplIntegrationTest {
         publicity.setMessage(message);
         publicity.setDuration(duration);
 
-        when(publicityService.findById(id)).thenReturn(Optional.empty());
+        when(publicityRepository.findById(id)).thenReturn(Optional.empty());
 
         //Act
         Throwable exception = catchThrowable(() -> {
@@ -97,9 +106,9 @@ public class PublicityServiceImplIntegrationTest {
         publicity.setDuration(duration);
 
 
-        when(publicityService.findById(id)).thenReturn(Optional.of(publicity));
+        when(publicityRepository.findById(id)).thenReturn(Optional.of(publicity));
         publicityService.deleteById(id);
-        when(publicityService.findById(id)).thenReturn(Optional.empty());
+        when(publicityRepository.findById(id)).thenReturn(Optional.empty());
         Throwable exception = catchThrowable(() -> {
             Optional<Publicity> publicity1 = publicityService.findById(id);
             publicity1.get();
@@ -119,8 +128,11 @@ public class PublicityServiceImplIntegrationTest {
         publicity.setId(id);
         publicity.setMessage(message);
         publicity.setDuration(duration);
+        publicity.setUserId(1L);
+        User user = User.builder().fullName("none").id(publicity.getUserId()).build();
+        when(userClient.fetchById(publicity.getUserId())).thenReturn(ResponseEntity.of(Optional.of(user)));
+        when(publicityRepository.save(publicity)).thenReturn(publicity);
 
-        when(publicityService.save(publicity)).thenReturn(publicity);
         Publicity result = publicityService.save(publicity);
         assertThat(result.getMessage()).isEqualTo(publicity.getMessage());
     }
@@ -137,8 +149,8 @@ public class PublicityServiceImplIntegrationTest {
         publicity.setId(id);
         publicity.setMessage(message);
         publicity.setDuration(duration);
-
-        when(publicityService.save(publicity)).thenReturn(publicity);
+        publicity.setUserId(1L);
+        when(publicityRepository.save(publicity)).thenReturn(publicity);
 
 
         Long id1 = 1L;
@@ -146,14 +158,15 @@ public class PublicityServiceImplIntegrationTest {
         int duration1 = 1;
         Publicity publicity1 = new Publicity();
         publicity1.setId(id);
-        publicity1.setMessage(message);
-        publicity1.setDuration(duration);
+        publicity1.setMessage(message1);
+        publicity1.setDuration(duration1);
+        publicity1.setUserId(1L);
+        User user = User.builder().fullName("none").id(publicity.getUserId()).build();
 
+        when(publicityRepository.save(publicity)).thenReturn(publicity1);
 
-
-
-        when(publicityService.save(publicity)).thenReturn(publicity1);
-        when(publicityService.findById(publicity.getId())).thenReturn(Optional.of(publicity1));
+        when(userClient.fetchById(publicity.getUserId())).thenReturn(ResponseEntity.of(Optional.of(user)));
+        when(publicityRepository.findById(publicity.getId())).thenReturn(Optional.of(publicity1));
         assertThat(publicityService.findById(id).get().getMessage()).isEqualTo(publicity1.getMessage());
 
     }

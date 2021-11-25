@@ -4,10 +4,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import pe.edu.upc.orderservice.client.InventoryClient;
 import pe.edu.upc.orderservice.entities.Order;
 import pe.edu.upc.orderservice.repositories.OrderRepository;
 import pe.edu.upc.orderservice.services.OrderService;
@@ -23,6 +25,10 @@ public class OrderServiceImplIntegrationTest {
 
     @MockBean
     private OrderRepository orderRepository;
+
+    @MockBean
+    @Qualifier("pe.edu.upc.orderservice.client.InventoryClient")
+    private InventoryClient inventoryClient;
 
     @Autowired
     private OrderService orderService;

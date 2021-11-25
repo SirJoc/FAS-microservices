@@ -4,11 +4,14 @@ package pe.edu.upc.paymentservice;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import pe.edu.upc.paymentservice.client.UserClient;
 import pe.edu.upc.paymentservice.entities.Publicity;
 import pe.edu.upc.paymentservice.entities.Subscription;
 import pe.edu.upc.paymentservice.repository.SubscriptionRepository;
@@ -26,8 +29,12 @@ public class SubscriptionServiceImplIntegrationTest {
     @MockBean
     private SubscriptionRepository subscriptionRepository;
 
-    @MockBean
+    @Autowired
     private SubscriptionService subscriptionService;
+
+    @MockBean
+    @Qualifier("pe.edu.upc.paymentservice.client.UserClient")
+    private UserClient userClient;
 
     @TestConfiguration
     static class SubscriptionImplTestConfiguration{
@@ -48,7 +55,7 @@ public class SubscriptionServiceImplIntegrationTest {
         subscription.setId(id);
         subscription.setType(type);
 
-        when(subscriptionService.findById(id)).thenReturn(java.util.Optional.of(subscription));
+        when(subscriptionRepository.findById(id)).thenReturn(java.util.Optional.of(subscription));
 
         // Act
         Optional<Subscription> foundSubscription = subscriptionService.findById(id);
@@ -67,7 +74,7 @@ public class SubscriptionServiceImplIntegrationTest {
         subscription.setId(id);
         subscription.setType(type);
 
-        when(subscriptionService.findById(id)).thenReturn(Optional.empty());
+        when(subscriptionRepository.findById(id)).thenReturn(Optional.empty());
 
         // Act
         Throwable exception = catchThrowable(() -> {
@@ -88,9 +95,9 @@ public class SubscriptionServiceImplIntegrationTest {
         Subscription subscription = new Subscription();
         subscription.setId(id);
         subscription.setType(type);
-        when(subscriptionService.findById(id)).thenReturn(Optional.of(subscription));
+        when(subscriptionRepository.findById(id)).thenReturn(Optional.of(subscription));
         subscriptionService.deleteById(id);
-        when(subscriptionService.findById(id)).thenReturn(Optional.empty());
+        when(subscriptionRepository.findById(id)).thenReturn(Optional.empty());
         Throwable exception = catchThrowable(() -> {
             Optional<Subscription> subscription1 = subscriptionService.findById(id);
             subscription1.get();
@@ -109,7 +116,7 @@ public class SubscriptionServiceImplIntegrationTest {
         subscription.setId(id);
         subscription.setType(type);
 
-        when(subscriptionService.save(subscription)).thenReturn(subscription);
+        when(subscriptionRepository.save(subscription)).thenReturn(subscription);
         Subscription result = subscriptionService.save(subscription);
         assertThat(result.getType()).isEqualTo(subscription.getType());
     }
@@ -124,7 +131,7 @@ public class SubscriptionServiceImplIntegrationTest {
         subscription.setId(id);
         subscription.setType(type);
 
-        when(subscriptionService.save(subscription)).thenReturn(subscription);
+        when(subscriptionRepository.save(subscription)).thenReturn(subscription);
 
         String newType = "Regular";
         Long newId = 1L;
@@ -132,8 +139,8 @@ public class SubscriptionServiceImplIntegrationTest {
         Subscription subscription1 = new Subscription();
         subscription1.setId(newId);
         subscription1.setType(newType);
-        when(subscriptionService.save(subscription)).thenReturn(subscription1);
-        when(subscriptionService.findById(subscription.getId())).thenReturn(Optional.of(subscription1));
+        when(subscriptionRepository.save(subscription)).thenReturn(subscription1);
+        when(subscriptionRepository.findById(subscription.getId())).thenReturn(Optional.of(subscription1));
         assertThat(subscriptionService.findById(id).get().getType()).isEqualTo(subscription1.getType());
 
     }
