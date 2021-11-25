@@ -63,12 +63,7 @@ public class OrdersDetailsController {
     })
     @PutMapping("/{orderId}/order-detail/{orderDetailId}")
     public ResponseEntity<OrderDetail> updateOrderDetail(@PathVariable("orderId") Long orderId, @PathVariable("orderDetailId") Long orderDetailId, @RequestBody OrderDetail orderDetail) {
-        orderDetail.setId(orderDetailId);
-        OrderDetail orderDetailDB =  orderDetailService.updateOrderDetail(orderId, orderDetail);
-        if (orderDetailDB == null){
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(orderDetailDB);
+        return ResponseEntity.ok(orderDetailService.updateOrderDetail(orderId, orderDetail));
     }
 
     @Operation(summary = "Delete OrderDetail", description = "Deleted orderDetail by OrderId", tags = {"ordersDetails"})

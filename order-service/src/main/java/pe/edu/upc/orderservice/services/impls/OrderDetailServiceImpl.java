@@ -66,21 +66,24 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     public OrderDetail updateOrderDetail(Long orderId, OrderDetail orderDetail) {
 
         Order orderDB = orderRepository.findById(orderId).orElse(null);
-
         if (null == orderDB){
+            System.out.println("EL QUE FALLA ES ORDER");
             return null;
         }
 
-        OrderDetail orderDetailDB = getOrderDetail(orderDetail.getId());
+        OrderDetail orderDetailDB = orderDetailRepository.findById(orderDB.getOrderDetail().getId()).get();
         if (null == orderDetailDB){
+            System.out.println("EL QUE FALLA ES ORDERDETAIL");
             return null;
         }
         orderDetailDB.setDescription(orderDetail.getDescription());
         orderDetailDB.setPrice(orderDetail.getPrice());
         orderDetailDB.setQuantity(orderDetail.getQuantity());
-
+        orderDetailDB.setStatus(orderDetail.getStatus());
+        orderDetailRepository.save(orderDetailDB);
+        orderDB.setOrderDetail(orderDetailDB);
         orderRepository.save(orderDB);
-        return orderDetailRepository.save(orderDetailDB);
+        return orderDetailDB;
     }
 
     @Override
