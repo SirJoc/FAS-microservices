@@ -7,7 +7,7 @@ public interface CrudService<T, ID> {
     T save(T entity);
     List<T> findAll();
     T findById(ID id);
-    T update(T entity);
+    T update(ID id,T newEntity);
     void deleteById(ID id);
 }
 

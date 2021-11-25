@@ -1,16 +1,22 @@
 package upc.edu.pe.inventoryservice;
 
+import org.assertj.core.api.Assertions;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import upc.edu.pe.inventoryservice.client.UserClient;
 import upc.edu.pe.inventoryservice.entities.Product;
 import upc.edu.pe.inventoryservice.exception.ResourceNotFoundException;
+import upc.edu.pe.inventoryservice.model.User;
 import upc.edu.pe.inventoryservice.repositories.CategoryRepository;
 import upc.edu.pe.inventoryservice.repositories.ProductRepository;
 import upc.edu.pe.inventoryservice.services.CategoryService;
@@ -26,13 +32,22 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 class InventoryServiceApplicationTests {
-
-
 	@MockBean
 	private ProductRepository productRepository;
 
-	@MockBean
+	@Autowired
 	private ProductService productService;
+
+	@MockBean
+	private CategoryRepository categoryRepository;
+
+	@Autowired
+	private CategoryService categoryService;
+
+
+	@MockBean
+	@Qualifier("pe.edu.upc.paymentservice.client.UserClient")
+	private UserClient userClient;
 
 	@TestConfiguration
 	static class ProductImplTestConfiguration{
@@ -40,12 +55,14 @@ class InventoryServiceApplicationTests {
 		public ProductService productServiceService(){
 			return new ProductServiceImpl();
 		}
+
+		@Bean
+		public CategoryService categoryServiceService(){
+			return new CategoryServiceImpl();
+		}
 	}
 
-	@MockBean
-	private CategoryRepository categoryRepository;
-	@Autowired
-	private CategoryService categoryService;
+
 	@TestConfiguration
 	static class CategoryImplTestConfiguration{
 		@Bean
@@ -68,7 +85,10 @@ class InventoryServiceApplicationTests {
 		product.setDescription(description);
 		product.setCorporation(corporation);
 		product.setPrice(price);
-		when(productService.findById(id)).thenReturn(product);
+		product.setUserId(1L);
+		User user = User.builder().fullName("none").id(product.getUserId()).build();
+		when(userClient.fetchById(product.getUserId())).thenReturn(ResponseEntity.of(Optional.of(user)));
+		when(productRepository.findById(id)).thenReturn(Optional.of(product));
 
 		// Act
 		Product foundProduct = productService.findById(id);
@@ -95,10 +115,17 @@ class InventoryServiceApplicationTests {
 		product.setDescription(description);
 		product.setCorporation(corporation);
 		product.setPrice(price);
-
+		product.setUserId(1L);
+		User user = User.builder().fullName("none").id(product.getUserId()).build();
 		//Act
-		when(productService.findById(id)).thenReturn(null);
-		assertThat(productService.findById(id)).isEqualTo(null);
+		when(productRepository.findById(id)).thenReturn(Optional.empty());
+		when(userClient.fetchById(product.getUserId())).thenReturn(ResponseEntity.of(Optional.of(user)));
+		Throwable exception = Assertions.catchThrowable(() -> {
+			Product product1 = productService.findById(id);
+		});
+		String template = "Resource %s not found for %s with value %s";
+		String exceptedMessage = String.format(template, "Product", "Id", id);
+		assertThat(exception.getMessage()).isEqualTo(exceptedMessage);
 	}
 	@Test
 	@DisplayName("DELETE service")
@@ -114,12 +141,18 @@ class InventoryServiceApplicationTests {
 		product.setDescription(description);
 		product.setCorporation(corporation);
 		product.setPrice(price);
-
-
-		when(productService.findById(id)).thenReturn(product);
+		product.setUserId(1L);
+		User user = User.builder().fullName("none").id(product.getUserId()).build();
+		when(userClient.fetchById(product.getUserId())).thenReturn(ResponseEntity.of(Optional.of(user)));
+		when(productRepository.findById(id)).thenReturn(Optional.of(product));
 		productService.deleteById(id);
-		when(productService.findById(id)).thenReturn(null);
-		assertThat(productService.findById(id)).isEqualTo(null);
+		when(productRepository.findById(id)).thenReturn(Optional.empty());
+		Throwable exception = Assertions.catchThrowable(() -> {
+			Product product1 = productService.findById(id);
+		});
+		String template = "Resource %s not found for %s with value %s";
+		String exceptedMessage = String.format(template, "Product", "Id", id);
+		assertThat(exception.getMessage()).isEqualTo(exceptedMessage);
 	}
 
 
@@ -138,7 +171,7 @@ class InventoryServiceApplicationTests {
 		product.setCorporation(corporation);
 		product.setPrice(price);
 
-		when(productService.save(product)).thenReturn(product);
+		when(productRepository.save(product)).thenReturn(product);
 		Product result = productService.save(product);
 		assertThat(result.getName()).isEqualTo(product.getName());
 	}
@@ -159,8 +192,11 @@ class InventoryServiceApplicationTests {
 		product.setDescription(description);
 		product.setCorporation(corporation);
 		product.setPrice(price);
+		product.setUserId(1L);
+		User user = User.builder().fullName("none").id(product.getUserId()).build();
+		when(userClient.fetchById(product.getUserId())).thenReturn(ResponseEntity.of(Optional.of(user)));
 
-		when(productService.save(product)).thenReturn(product);
+		when(productRepository.save(product)).thenReturn(product);
 
 
 		// Arrange
@@ -174,9 +210,11 @@ class InventoryServiceApplicationTests {
 		product1.setDescription(description1);
 		product1.setCorporation(corporation1);
 		product1.setPrice(price1);
-
-		when(productService.save(product)).thenReturn(product1);
-		when(productService.findById(product.getId())).thenReturn(product1);
+		product1.setUserId(1L);
+		User user1 = User.builder().fullName("none").id(product1.getUserId()).build();
+		when(userClient.fetchById(product1.getUserId())).thenReturn(ResponseEntity.of(Optional.of(user1)));
+		when(productRepository.save(product)).thenReturn(product1);
+		when(productRepository.findById(product.getId())).thenReturn(Optional.of(product1));
 		assertThat(productService.findById(id).getName()).isEqualTo(product1.getName());
 
 	}

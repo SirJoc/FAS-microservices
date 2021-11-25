@@ -7,8 +7,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import upc.edu.pe.inventoryservice.entities.Category;
+import upc.edu.pe.inventoryservice.entities.Product;
 import upc.edu.pe.inventoryservice.resource.CategoryResource;
+import upc.edu.pe.inventoryservice.resource.ProductResource;
 import upc.edu.pe.inventoryservice.resource.SaveCategoryResource;
+import upc.edu.pe.inventoryservice.resource.SaveProductResource;
 import upc.edu.pe.inventoryservice.services.CategoryService;
 
 
@@ -51,9 +54,21 @@ public class CategoryController {
         return ResponseEntity.ok(convertListToListResource(categories));
     }
 
+    @PutMapping("/categories/{id}")
+    public CategoryResource updateCategory(@Valid @RequestBody SaveCategoryResource resource, @PathVariable(name = "id") Long id){
+        Category category = convertToEntity(resource);
+        return convertToResource(categoryService.update(id,category));
+    }
+
     @PostMapping(path = "/categories")
     public CategoryResource createCategory(@Valid @RequestBody SaveCategoryResource resource)   {
         return convertToResource(categoryService.save(convertToEntity(resource)));
+    }
+
+    @DeleteMapping("/categories/{id}")
+    public ResponseEntity<?> deleteCategory(@PathVariable(name = "id") Long id){
+        categoryService.deleteById(id);
+        return ResponseEntity.ok("DELETED");
     }
 
     private Category convertToEntity(SaveCategoryResource resource) {

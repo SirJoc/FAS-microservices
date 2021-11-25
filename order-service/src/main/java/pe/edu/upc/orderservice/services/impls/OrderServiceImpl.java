@@ -1,9 +1,12 @@
 package pe.edu.upc.orderservice.services.impls;
 
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pe.edu.upc.orderservice.client.InventoryClient;
 import pe.edu.upc.orderservice.entities.Order;
+import pe.edu.upc.orderservice.model.Product;
 import pe.edu.upc.orderservice.repositories.OrderRepository;
 import pe.edu.upc.orderservice.services.OrderService;
 
@@ -16,10 +19,16 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private  OrderRepository orderRepository;
-
+    @Autowired
+    InventoryClient inventoryClient;
     @Override
     public List<Order> listAllOrders() {
-        return orderRepository.findAll();
+        List<Order> orderList = orderRepository.findAll();
+        for (int i = 0; i < orderList.size(); i++) {
+            List<Product> products = inventoryClient.fetchAllProductByOrderDetailId(orderList.get(i).getOrderDetail().getId()).getBody();
+            orderList.get(i).getOrderDetail().setProducts(products);
+        }
+        return orderList;
     }
 
     @Override
@@ -42,7 +51,8 @@ public class OrderServiceImpl implements OrderService {
             return null;
         }
 
-        //TODO: implement updates
+        orderDB.setCreateAt(order.getCreateAt());
+        orderDB.setStatus(order.getStatus());
 
         return orderRepository.save(orderDB);
     }
@@ -54,6 +64,7 @@ public class OrderServiceImpl implements OrderService {
             return null;
         }
         orderDB.setStatus("DELETED");
-        return orderRepository.save(orderDB);
+        orderRepository.deleteById(id);
+        return orderDB;
     }
 }

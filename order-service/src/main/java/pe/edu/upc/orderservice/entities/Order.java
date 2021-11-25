@@ -21,10 +21,11 @@ public class Order {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createAt;
 
-    @Column(length = 1, nullable = false)
+    @Column(length = 10, nullable = false)
     private String status;
 
     // Relationships
-    @OneToOne(mappedBy = "order")
+    @OneToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "order_detail")
     private OrderDetail orderDetail;
 }

@@ -10,4 +10,5 @@ public interface ProductService extends CrudService<Product, Long> {
     Product assignProductCategory(Long productId, Long categoryId);
     Product unassignProductCategory(Long productId, Long categoryId);
     List<Product> getAllProductsByCategoryId(Long categoryId);
+    List<Product> findAllByOdId(Long orderId);
 }

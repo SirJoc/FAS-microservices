@@ -4,11 +4,14 @@ package pe.edu.upc.paymentservice;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import pe.edu.upc.paymentservice.client.UserClient;
 import pe.edu.upc.paymentservice.entities.Publicity;
 import pe.edu.upc.paymentservice.entities.Subscription;
 import pe.edu.upc.paymentservice.repository.SubscriptionRepository;
@@ -28,6 +31,10 @@ public class SubscriptionServiceImplIntegrationTest {
 
     @Autowired
     private SubscriptionService subscriptionService;
+
+    @MockBean
+    @Qualifier("pe.edu.upc.paymentservice.client.UserClient")
+    private UserClient userClient;
 
     @TestConfiguration
     static class SubscriptionImplTestConfiguration{

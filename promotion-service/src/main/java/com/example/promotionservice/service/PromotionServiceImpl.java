@@ -46,8 +46,8 @@ public class PromotionServiceImpl implements PromotionService {
     }
 
     @Override
-    public Promotion deletePromotion(Long id) {
+    public void deletePromotion(Long id) {
         Promotion promotionDB = getPromotionById(id);
-        return promotionRepository.save(promotionDB);
+        promotionRepository.delete(promotionDB);
     }
 }
