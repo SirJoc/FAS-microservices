@@ -18,7 +18,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: lmadmin@fas-lm
-    url: jdbc:jdbc:mysql://localhost:3306/fas-lm;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:mysql://localhost:3306/fas-lm;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     password: Fas123456789
 
 
