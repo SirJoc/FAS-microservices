@@ -1,0 +1,22 @@
+server:
+  port: 8091
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  datasource:
+    username: lmadmin@fas-lm
+    url: jdbc:mysql://fas-lm.mysql.database.azure.com:3306/fas-lm
+    password: Fas123456789
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    properties:
+      hibernate:
+        show_sql: true
+        use_sql_comment: false
+        format_sql: false
