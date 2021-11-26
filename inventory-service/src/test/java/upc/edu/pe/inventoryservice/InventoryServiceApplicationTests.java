@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import upc.edu.pe.inventoryservice.client.UserClient;
+import upc.edu.pe.inventoryservice.entities.Category;
 import upc.edu.pe.inventoryservice.entities.Product;
 import upc.edu.pe.inventoryservice.exception.ResourceNotFoundException;
 import upc.edu.pe.inventoryservice.model.User;
@@ -217,5 +218,92 @@ class InventoryServiceApplicationTests {
 		when(productRepository.findById(product.getId())).thenReturn(Optional.of(product1));
 		assertThat(productService.findById(id).getName()).isEqualTo(product1.getName());
 
+	}
+
+	// CATEGORY
+	@Test
+	@DisplayName("When findCategoryById With Valid Id Then Returns Category")
+	public void whenFindCategoryByIdThenReturnsCategory() {
+		// Arrange
+		Long id = 1L;
+		String name = "PruebaName1";
+		String description = "PruebaDesc1";
+		Category category = new Category();
+		category.setName(name);
+		category.setDescription(description);
+		when(categoryRepository.findById(id)).thenReturn(Optional.of(category));
+
+		// Act
+		Category foundCategory = categoryService.findById(id);
+
+		// Assert
+		assertThat(foundCategory.getName()).isEqualTo(name);
+		assertThat(foundCategory.getDescription()).isEqualTo(description);
+	}
+
+	@Test
+	@DisplayName("DELETE Category service")
+	public void WhenDeleteACategoryItGetsNoValuePresent() throws Exception {
+		// Arrange
+		Long id = 1L;
+		String name = "PruebaName1";
+		String description = "PruebaDesc1";
+		Category category = new Category();
+		category.setName(name);
+		category.setDescription(description);
+		when(categoryRepository.findById(id)).thenReturn(Optional.of(category));
+
+		categoryService.deleteById(id);
+		when(categoryRepository.findById(id)).thenReturn(Optional.empty());
+		Throwable exception = Assertions.catchThrowable(() -> {
+			Category category1 = categoryService.findById(id);
+		});
+		String template = "Resource %s not found for %s with value %s";
+		String exceptedMessage = String.format(template, "Category", "Id", id);
+		assertThat(exception.getMessage()).isEqualTo(exceptedMessage);
+	}
+
+
+	@Test
+	@DisplayName("Create Category service")
+	public void WhenCreateACategoryGetsOk() throws Exception {
+		// Arrange
+		Long id = 1L;
+		String name = "PruebaName1";
+		String description = "PruebaDesc1";
+		Category category = new Category();
+		category.setName(name);
+		category.setDescription(description);
+
+		when(categoryRepository.save(category)).thenReturn(category);
+		Category  result = categoryService.save(category);
+		assertThat(result.getName()).isEqualTo(category.getName());
+	}
+
+
+	@Test
+	@DisplayName("UPDATE Category service")
+	public void WhenUpdateACategoryGetsOk() throws Exception {
+		// Arrange
+		Long id = 1L;
+		String name = "PruebaName1";
+		String description = "PruebaDesc1";
+		Category category = new Category();
+		category.setName(name);
+		category.setDescription(description);
+		category.setId(id);
+
+		when(categoryRepository.save(category)).thenReturn(category);
+
+		// Arrange
+		String name1 = "PruebaName2";
+		String description1 = "PruebaDesc2";
+		Category category1 = new Category();
+		category1.setName(name1);
+		category1.setDescription(description1);
+
+		when(categoryRepository.save(category)).thenReturn(category1);
+		when(categoryRepository.findById(category.getId())).thenReturn(Optional.of(category1));
+		assertThat(categoryService.findById(id).getName()).isEqualTo(category1.getName());
 	}
 }
