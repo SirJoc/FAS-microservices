@@ -1,13 +1,10 @@
 package pe.edu.upc.reviewservice.resources;
 
-import pe.edu.upc.reviewservice.model.Product;
-import pe.edu.upc.reviewservice.model.User;
-
 public class CommentResource {
     private Long id;
     private String message;
-    private User user;
-    private Product product;
+    private Long userId;
+    private Long productId;
 
     public Long getId() {
         return id;
@@ -25,19 +22,19 @@ public class CommentResource {
         this.message = message;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public Product getProduct() {
-        return product;
+    public Long getProductId() {
+        return productId;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 }

@@ -59,4 +59,5 @@ public class Comment {
     public void setProduct(Product product) {
         this.product = product;
     }
+
 }
