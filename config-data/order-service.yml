@@ -16,11 +16,12 @@ spring:
   # DB
   # ===============================
   datasource:
-    url: jdbc:h2:mem:ordersDB;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    driverClassName: org.h2.Driver
-    platform: h2
-    username: sa
-    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: lmadmin@fas-lm
+    url: jdbc:jdbc:mysql://localhost:3306/fas-lm;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    password: Fas123456789
+
+
 
   # ===============================
   # JPA / HIBERNATE
